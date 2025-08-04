@@ -37,7 +37,7 @@ const Login = () => {
                                 .catch(error=>{setloading(false);alert(error.response.data);setpassword("");});  
         }   
     }
-    if(loading)return <SyncLoader />
+    //if(loading)return <SyncLoader />
     
   return (
     <div className='input-box'>
