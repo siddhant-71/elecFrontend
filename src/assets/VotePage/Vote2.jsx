@@ -7,10 +7,12 @@ import ExternalTreasurerJr from '../NominationsJr/ExternalTreasurerJr.jsx';
 import Crs from '../NominationsJr/CRs.jsx';
 import ThankYouPage from '../LoginPage/ThankYouPage.jsx';
 import axios from 'axios';
+import { SyncLoader } from 'react-spinners';
 
 
 
 const Vote2 = ({setSecondYear,setdepartmental}) => {
+    const [loading, setloading] = useState(false);
     const [JrDR1, setJrDR1] = useState("");
     const [JrDR2, setJrDR2] = useState("");
     const [JrADR1, setJrADR1] = useState("");
@@ -34,33 +36,11 @@ const Vote2 = ({setSecondYear,setdepartmental}) => {
         const email=localStorage.getItem("email");
         for(let i=0;i<18;i++){
             if(FullVote[i]==""){
-               alert("please Vote for All Candidates");
-               return;
+                alert("please Vote for All Candidates");
+                return;
             }
         }
-        // const secondYearDTO ={
-        // "email":`${email}`,
-        // "rollNo":`${email.substring(7,10)}`,
-        // "CR":`${FullVote[0]}`,
-        // "LR":`${FullVote[1]}`,
-        // "AcrA":`${FullVote[2]}`,
-        // "AcrB":`${FullVote[3]}`,
-        // "SportsBoysOne":`${FullVote[4]}`,
-        // "SportsBoysTwo":`${FullVote[5]}`,
-        // "SportsGirl":`${FullVote[6]}`,
-        // "CulturalOne":`${FullVote[7]}`,
-        // "CulturalTwo":`${FullVote[8]}`,
-        // "CulturalThree":`${FullVote[9]}`,
-        // "CreativeOne":`${FullVote[10]}`,
-        // "CreativeTwo":`${FullVote[11]}`,
-        // "CreativeThree":`${FullVote[12]}`,
-        // "Technical":`${FullVote[13]}`,
-        // "Literary":`${FullVote[16]}`,
-        // "Alumni":`${FullVote[14]}`,
-        // "External":`${FullVote[17]}`,
-        // "Treasurer":`${FullVote[15]}`
-        // }
-        
+        setloading(true);
         const token=localStorage.getItem("token");
         const backendUrl=import.meta.env.VITE_APP_URL;
         axios.post(`${backendUrl}api/vote/juniors`,{
@@ -85,13 +65,18 @@ const Vote2 = ({setSecondYear,setdepartmental}) => {
             "external":`${FullVote[17]}`,
             "treasurer":`${FullVote[15]}`
         },{params:{token:token}}).then(response=>{
+            setloading(false);
             console.log(response.data);
             setSecondYear(false);
             setdepartmental(true);
         }).catch(error=>{
+            setloading(false);
             alert(error.response.data);
         });
+        setloading(false);
     }
+
+    if(loading)return <SyncLoader/>
   return (
     <div>
         <h1 style={{

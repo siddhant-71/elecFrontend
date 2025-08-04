@@ -8,8 +8,10 @@ import Creatives from '../Nominations/Creative.jsx'
 import TechLiteraryAlumni from '../Nominations/TechLiteraryAlumni.jsx'
 import ExternalTreasurer from '../Nominations/ExternalTreasurer.jsx'
 import axios from 'axios'
+import { SyncLoader } from 'react-spinners'
 
 const Vote = () => {
+    const [loading, setloading] = useState(false)
     const navigate=useNavigate();
     const [Done, setDone] = useState(false);
     const [DR1, setDR1] = useState("");
@@ -38,6 +40,7 @@ const Vote = () => {
     }, [])
     
     async function SubmitVoting() {
+        setloading(true);
         const FullVotes=[DR1,DR2,ADR1,ADR2,Sports1,Sports2,Sports3,Cult1,Cult2,Cult3,Creative1,Creative2,Creative3,Technical,Alumni,Treasurer,Literary,External];
         for(let i=0;i<18;i++){
             if(FullVotes[i]==""){
@@ -70,14 +73,17 @@ const Vote = () => {
             "external":`${FullVotes[17]}`,
             "treasurer":`${FullVotes[15]}`
         },{params:{token:token}}).then(response=>{
+            setloading(false);
             console.log(response.data);
+            setDone(true);
             navigate("/ThankYou");
         }).catch(error=>{
+            setloading(false);
             alert(error);
         });
         console.log(FullVotes);
-        setDone(true);
     }
+    if(loading)return <SyncLoader/>
     if(Done)return <ThankYouPage/>
   return (
     <div>
