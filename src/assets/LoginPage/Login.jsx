@@ -38,7 +38,7 @@ const Login = () => {
         }   
     }
     if(loading)return <SyncLoader />
-    
+
   return (
     <div className='input-box'>
         <p style={{fontSize:"25px",color:"white"}}>LOGIN HERE</p>
