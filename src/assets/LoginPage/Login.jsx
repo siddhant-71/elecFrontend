@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import {SyncLoader} from 'react-spinners'
 import axios from 'axios'
 import "./Login.css"
 import { useNavigate } from 'react-router-dom'
+import Vote2 from '../VotePage/Vote2'
 
 const Login = () => {
     const navigate=useNavigate();
     const [email, setemail] = useState("")
+    const [loading, setloading] = useState(false);
     useEffect(() => {
       localStorage.clear();
     }, [])
@@ -16,6 +19,7 @@ const Login = () => {
             alert("incorrect email check your email");
         }
         else{
+                setloading(true);
                 const loginBody={
                     email:`${email.trimStart()}`,
                     password:`${password}`
@@ -27,11 +31,13 @@ const Login = () => {
                                     localStorage.setItem("loginTime",Date.now().toString());
                                     localStorage.setItem("email",email);
                                     console.log(localStorage.getItem("token"));
+                                    setloading(false);
                                     navigate("/Home",{ replace: true });
                                 })
-                                .catch(error=>{alert(error.response.data);setpassword("")});  
+                                .catch(error=>{setloading(false);alert(error.response.data);setpassword("");});  
         }   
     }
+    if(loading)return <SyncLoader />
     
   return (
     <div className='input-box'>
